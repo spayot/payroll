@@ -1,0 +1,8 @@
+**/.DS_Store
+**/__pycache__**
+**/.ipynb_checkpoints/**
+models/**/*.bin
+.idea/*
+**/.pytest_cache/**
+**/*.egg-info/**
+data/*

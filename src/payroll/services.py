@@ -19,6 +19,11 @@ class Date:
     def __repr__(self):
         return self.datetime.strftime("%Y-%m-%d")
 
+    @classmethod
+    def today(cls):
+        today = datetime.today()
+        return cls(today.year, today.month, today.day)
+
 
 @dataclass
 class ServiceType:

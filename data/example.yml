@@ -1,0 +1,7 @@
+services:
+  - employee_name: Jane Doe
+    name: babysitting_one_child
+    hourly_rate: 12
+  - employee_name: Jane Doe
+    name: babysitting_two_children
+    hourly_rate: 15

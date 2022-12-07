@@ -16,6 +16,7 @@ class Employee:
 
 @dataclass
 class ServiceType:
+    employee: Employee
     name: str
     hourly_rate: float
 
@@ -45,9 +46,18 @@ class ServiceTypeRegistry:
         with open(filepath, "r") as f:
             data = yaml.safe_load(f)
         for info in data.get("services"):
-            registry.register(ServiceType(**info))
+            registry.register(
+                ServiceType(
+                    employee=Employee(info["employee_name"]),
+                    name=info["name"],
+                    hourly_rate=info["hourly_rate"],
+                )
+            )
 
         return registry
+
+    def get_employees(self) -> set[str]:
+        return {service.employee.name for service in self.types.values()}
 
     def to_yaml(self, filepath: str) -> None:
         registry_data = {"services": [asdict(t) for t in self.types.values()]}
@@ -61,7 +71,6 @@ class ServiceTypeRegistry:
 @dataclass
 class Service:
     date: Date
-    employee: Employee
     type: ServiceType
     duration_hrs: float
 

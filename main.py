@@ -1,12 +1,14 @@
+from collections import namedtuple
+
+import yaml
+
 from src import payroll as pr
 
+FILEPATH = "data/megan.yml"
 
-def main():
 
-    registry = pr.ServiceTypeRegistry()
-
-    registry.register(pr.ServiceType(name="one_child", hourly_rate=22))
-    registry.register(pr.ServiceType(name="two_children", hourly_rate=24))
+def main(filepath):
+    registry = pr.ServiceTypeRegistry.from_yaml(filepath)
 
     current_week_dates = pr.generate_current_week_dates()
     gui = pr.PayPeriodGUI(
@@ -19,4 +21,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(FILEPATH)

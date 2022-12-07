@@ -5,7 +5,6 @@ from .payperiod import PayPeriod
 from .services import Employee, Service, ServiceType, ServiceTypeRegistry
 
 TITLE = "Payroll Management System"
-DEFAULT_EMPLOYEE = "John Doe"
 
 
 class ServiceEntry:
@@ -34,9 +33,9 @@ class ServiceEntry:
 
 
 class EmployeeEntry:
-    def __init__(self, root, row: int, col: int):
+    def __init__(self, root, row: int, col: int, default: str):
         self.entry = tk.Entry(root, background="darkgrey")
-        self.entry.insert(50, DEFAULT_EMPLOYEE)
+        self.entry.insert(50, default)
         self.entry.grid(row=row, column=col)
 
     def read(self) -> Employee:
@@ -61,7 +60,10 @@ class PayPeriodGUI:
 
     def create_employee_entry(self, row: int = 0):
         employee_name_label = tk.Label(self.root, text="Employee Name")
-        employee_entry = EmployeeEntry(self.root, row=row, col=1)
+        default_employee = self.registry.get_employees().pop()
+        employee_entry = EmployeeEntry(
+            self.root, row=row, col=1, default=default_employee
+        )
 
         employee_name_label.grid(row=row, column=0)
 

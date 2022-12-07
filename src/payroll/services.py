@@ -3,6 +3,8 @@ from datetime import datetime
 
 import yaml
 
+from .dates import Date
+
 OVERTIME_MULTIPLIER = 1.5
 OVERTIME_SUFFIX = "_OT"
 
@@ -10,19 +12,6 @@ OVERTIME_SUFFIX = "_OT"
 @dataclass
 class Employee:
     name: str
-
-
-class Date:
-    def __init__(self, *args, **kwargs):
-        self.datetime = datetime(*args, **kwargs)
-
-    def __repr__(self):
-        return self.datetime.strftime("%Y-%m-%d")
-
-    @classmethod
-    def today(cls):
-        today = datetime.today()
-        return cls(today.year, today.month, today.day)
 
 
 @dataclass

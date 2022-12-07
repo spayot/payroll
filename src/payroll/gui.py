@@ -1,6 +1,8 @@
 import tkinter as tk
 
-from . import payperiod, services
+from .dates import Date
+from .payperiod import PayPeriod
+from .services import Employee, Service, ServiceType, ServiceTypeRegistry
 
 TITLE = "Payroll Management System"
 DEFAULT_EMPLOYEE = "John Doe"
@@ -9,8 +11,8 @@ DEFAULT_EMPLOYEE = "John Doe"
 class ServiceEntry:
     def __init__(
         self,
-        date: services.Date,
-        svc_type: services.ServiceType,
+        date: Date,
+        svc_type: ServiceType,
         layout_row: int,
         layout_col: int,
         root: tk.Tk,
@@ -21,9 +23,9 @@ class ServiceEntry:
         self.gui_entry.insert(0, 0)
         self.gui_entry.grid(row=layout_row, column=layout_col)
 
-    def read(self, employee: services.Employee):
+    def read(self, employee: Employee):
         duration_hrs = float(self.gui_entry.get())
-        return services.Service(
+        return Service(
             date=self.date,
             employee=employee,
             type=self.svc_type,
@@ -37,14 +39,12 @@ class EmployeeEntry:
         self.entry.insert(50, DEFAULT_EMPLOYEE)
         self.entry.grid(row=row, column=col)
 
-    def read(self) -> services.Employee:
-        return services.Employee(self.entry.get())
+    def read(self) -> Employee:
+        return Employee(self.entry.get())
 
 
 class PayPeriodGUI:
-    def __init__(
-        self, dates: list[services.Date], registry: services.ServiceTypeRegistry
-    ):
+    def __init__(self, dates: list[Date], registry: ServiceTypeRegistry):
         self.dates = dates
         self.registry = registry
         self.root = tk.Tk()
@@ -111,7 +111,7 @@ class PayPeriodGUI:
         return button_calculate, button_save
 
     def calculate_payroll(self) -> None:
-        self.payperiod = payperiod.PayPeriod(registry=self.registry)
+        self.payperiod = PayPeriod(registry=self.registry)
         employee = self.employee_entry.read()
 
         for entry in self.service_entries:
@@ -122,6 +122,6 @@ class PayPeriodGUI:
     def _parse_entry(
         self,
         entry: tk.Entry,
-        date: services.Date,
+        date: Date,
     ):
         pass

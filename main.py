@@ -2,7 +2,7 @@ import argparse
 
 from src import payroll as pr
 
-DEFAULT_FILEPATH = "data/services.yml"
+DEFAULT_CONFIGPATH = "config/example.yml"
 
 
 def main(filepath):
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p",
         "--path",
-        default="data/example.yml",
+        default=DEFAULT_CONFIGPATH,
         help="path to the services config YAML file",
         type=str,
     )

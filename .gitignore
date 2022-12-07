@@ -6,4 +6,5 @@ models/**/*.bin
 **/.pytest_cache/**
 **/*.egg-info/**
 data/*
-!data/example.yml
+config/*
+!config/example.yml

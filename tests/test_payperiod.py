@@ -7,17 +7,23 @@ import payroll as pr
 def registry():
     registry = pr.ServiceTypeRegistry()
 
-    registry.register(pr.ServiceType(name="one_child", hourly_rate=22))
-    registry.register(pr.ServiceType(name="two_children", hourly_rate=24))
+    employee = pr.Employee(name="Jane Doe")
+    registry.register(
+        pr.ServiceType(employee=employee, name="one_child", hourly_rate=22)
+    )
+    registry.register(
+        pr.ServiceType(employee=employee, name="two_children", hourly_rate=24)
+    )
     return registry
 
 
 @pytest.fixture(scope="module")
 def service():
-    employee = pr.Employee(name="Jane Doe")
-    service_type = pr.ServiceType(name="one_child", hourly_rate=22)
+    service_type = pr.ServiceType(
+        employee=pr.Employee(name="Jane Doe"), name="one_child", hourly_rate=22
+    )
     date = pr.Date(2022, 10, 23)
-    return pr.Service(date, employee, service_type, duration_hrs=8)
+    return pr.Service(date, service_type, duration_hrs=8)
 
 
 def test_record_service(service, registry):
@@ -39,7 +45,6 @@ def test_total_hours(service, registry):
 def test_total_hours_by_type_with_overtime(registry):
     payperiod = pr.PayPeriod(registry=registry)
     date = pr.Date(2022, 10, 23)
-    employee = pr.Employee("Jane Doe")
 
     services = [
         ("one_child", 8),
@@ -51,7 +56,7 @@ def test_total_hours_by_type_with_overtime(registry):
 
     for type_name, duration in services:
         payperiod.record_service(
-            pr.Service(date, employee, registry[type_name], duration)
+            pr.Service(date=date, type=registry[type_name], duration_hrs=duration)
         )
 
     assert payperiod.total_hours == 45.5

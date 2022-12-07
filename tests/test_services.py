@@ -19,16 +19,18 @@ def employee():
 
 @pytest.fixture(scope="module")
 def service_type():
-    return pr.ServiceType(name="one_child", hourly_rate=22)
+    return pr.ServiceType(
+        name="one_child", hourly_rate=22, employee=pr.Employee(name="Jane Doe")
+    )
 
 
 def test_date(date):
-    assert str(date) == "2022-10-23"
+    assert str(date) == "Sun 2022-10-23"
 
 
 class TestService:
-    def test_base_cost(self, date, employee, service_type):
-        service = pr.Service(date, employee, service_type, duration_hrs=8)
+    def test_base_cost(self, date, service_type):
+        service = pr.Service(date, service_type, duration_hrs=8)
         assert service.base_cost == 176
 
 
@@ -53,8 +55,8 @@ class TestRegistry:
         )
 
     def test_from_yaml(self):
-        registry = pr.ServiceTypeRegistry.from_yaml("data/service_types.yaml")
-        assert registry.get_rate_from_type("two_children") == 24
+        registry = pr.ServiceTypeRegistry.from_yaml("config/example.yml")
+        assert registry.get_rate_from_type("babysitting_one_child") == 12
 
     def test_to_yaml(self, tmpdir, service_type):
         p = tmpdir.join("tmp.yml")

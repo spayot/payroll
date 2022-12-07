@@ -4,7 +4,7 @@ import yaml
 
 from src import payroll as pr
 
-FILEPATH = "data/megan.yml"
+FILEPATH = "data/services.yml"
 
 
 def main(filepath):

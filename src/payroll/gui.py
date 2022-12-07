@@ -22,11 +22,10 @@ class ServiceEntry:
         self.gui_entry.insert(0, 0)
         self.gui_entry.grid(row=layout_row, column=layout_col)
 
-    def read(self, employee: Employee):
+    def read(self):
         duration_hrs = float(self.gui_entry.get())
         return Service(
             date=self.date,
-            employee=employee,
             type=self.svc_type,
             duration_hrs=duration_hrs,
         )
@@ -51,11 +50,11 @@ class PayPeriodGUI:
 
     def create_layout(self) -> tk.Tk:
         self.employee_entry = self.create_employee_entry(row=0)
-        column_labels = self.create_column_labels(row=1, starting_col=1)
-        date_labels = self.create_row_labels(starting_row=2, col=0)
+        _ = self.create_column_labels(row=1, starting_col=1)
+        _ = self.create_row_labels(starting_row=2, col=0)
         self.service_entries = self.create_service_entries(starting_row=2)
         buttons_row = 2 + len(self.dates) + 1
-        buttons = self.create_bottom_buttons(row=buttons_row)
+        _ = self.create_bottom_buttons(row=buttons_row)
         return self.root
 
     def create_employee_entry(self, row: int = 0):
@@ -71,9 +70,11 @@ class PayPeriodGUI:
 
     def create_column_labels(self, row: int, starting_col: int) -> dict:
         labels = {}
-        for i, svc_type in enumerate(self.registry.types):
-            labels[svc_type] = tk.Label(self.root, text=svc_type)
-            labels[svc_type].grid(row=row, column=i + starting_col)
+        for i, (svc_label, svc_type) in enumerate(self.registry.types.items()):
+            labels[svc_label] = tk.Label(
+                self.root, text=f"{svc_label} @ {svc_type.hourly_rate} / hr"
+            )
+            labels[svc_label].grid(row=row, column=i + starting_col)
 
         return labels
 
@@ -104,7 +105,7 @@ class PayPeriodGUI:
 
     def create_bottom_buttons(self, row: int):
         button_calculate = tk.Button(
-            self.root, text="Calculate Payroll", padx=50, command=self.calculate_payroll
+            self.root, text="Calculate Payroll", padx=50, command=self.display_payroll
         )
         button_save = tk.Button(self.root, text="Record Payroll", padx=50)
 
@@ -114,16 +115,33 @@ class PayPeriodGUI:
 
     def calculate_payroll(self) -> None:
         self.payperiod = PayPeriod(registry=self.registry)
-        employee = self.employee_entry.read()
 
         for entry in self.service_entries:
-            service = entry.read(employee=employee)
+            service = entry.read()
             self.payperiod.record_service(service)
-        print(self.payperiod.total_hours_by_type_with_overtime())
 
-    def _parse_entry(
-        self,
-        entry: tk.Entry,
-        date: Date,
-    ):
-        pass
+    def display_payroll(self, row: int = 100):
+        self.calculate_payroll()
+        output = tk.Text(self.root, width=100, height=5)
+        output.insert(tk.END, self.format_payroll())
+        output.grid(row=row, columnspan=5)
+        return output
+
+    def format_payroll(self) -> str:
+
+        s = f"""Total hours by Type:\n{self.format_total_hours()}
+Estimated Payroll for this PayPeriod: \t${self.payperiod.total_pay:.02f}
+        """
+        return s
+
+    def format_total_hours(self):
+        # total_hours = ""
+        # for k, v in self.payperiod.total_hours_by_type_with_overtime():
+        #     total_hours += f"{k:<30}:{v:<20}\n"
+
+        total_hours_dict = self.payperiod.total_hours_by_type_with_overtime()
+
+        total_hours = "\n".join(
+            [f"\t{k:<20}:{v:<10}" for k, v in total_hours_dict.items()]
+        )
+        return total_hours

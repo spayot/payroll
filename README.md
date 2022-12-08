@@ -17,7 +17,7 @@ Launches a simple user interface allowing to:
 It can then calculate hours and paycheck (before taxes) by service type, baking in overtime. 
 
 ## Personalizing the services types and rates
-cf. `config/example.yml` for an example of config file setup.
+cf. [`config/example.yml`](config/example.yml) for an example of config file setup.
 you can define there a set of service types, from different providers, with different hourly rates.
 
 ## Testing

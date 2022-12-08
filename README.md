@@ -15,4 +15,4 @@ cf. `config/example.yml` for an example of config file setup.
 the above command launches a simple user interface allowing to populate the number of hours executed each day of the week by the service provider.
 It can then calculate hours and paycheck (before taxes) by service type, baking in overtime.  
 ## GUI Example
-![GUI example](gui_example.png)
+![GUI example](images/gui_example.png)

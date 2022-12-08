@@ -22,8 +22,8 @@ def main(filepath):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-p",
-        "--path",
+        "-c",
+        "--config",
         default=DEFAULT_CONFIGPATH,
         help="path to the services config YAML file",
         type=str,
@@ -31,4 +31,4 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main(args.path)
+    main(args.config)

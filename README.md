@@ -18,7 +18,13 @@ It can then calculate hours and paycheck (before taxes) by service type, baking 
 
 ## Personalizing the services types and rates
 cf. `config/example.yml` for an example of config file setup.
+you can define there a set of service types, from different providers, with different hourly rates.
 
+## Testing
+install package with test suite:  
+`pip install -e .[dev]`
+running the test suite:  
+`pytest --cov=src/ tests/`
  
 ## GUI Example
 ![GUI example](images/gui_example.png)
@@ -26,3 +32,9 @@ cf. `config/example.yml` for an example of config file setup.
 ## Learnings
 Trying to apply in here some of the principles read from Uncle Bob's Clean Code:
 *Martin, Robert C. Clean Code: A Handbook of Agile Software Craftsmanship., Addison-Wesly, 2009*
+
+## To Do
+- [x] extract service types into config file
+- [ ] extract overtime threshold into config file
+- [ ] create drop down list instead of free form text entry for provider definition
+- [ ] implement recording functionality to record services provided during a payperiod into a csv file

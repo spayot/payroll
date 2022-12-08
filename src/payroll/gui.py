@@ -51,10 +51,10 @@ class PayPeriodGUI:
     def create_layout(self) -> tk.Tk:
         self.employee_entry = self.create_employee_entry(row=0)
         _ = self.create_column_labels(row=1, starting_col=1)
-        _ = self.create_row_labels(starting_row=2, col=0)
+        _ = self.create_dates_labels(starting_row=2, col=0)
         self.service_entries = self.create_service_entries(starting_row=2)
-        buttons_row = 2 + len(self.dates) + 1
-        _ = self.create_bottom_buttons(row=buttons_row)
+        buttons_row_position = 2 + len(self.dates) + 1
+        _ = self.create_bottom_buttons(row=buttons_row_position)
         return self.root
 
     def create_employee_entry(self, row: int = 0):
@@ -78,7 +78,9 @@ class PayPeriodGUI:
 
         return labels
 
-    def create_row_labels(self, starting_row: int, col: int = 0) -> dict:
+    def create_dates_labels(
+        self, starting_row: int, col: int = 0
+    ) -> dict[str, tk.Label]:
         labels = {}
         for i, date in enumerate(self.dates):
             labels[date] = tk.Label(self.root, text=date)
@@ -86,7 +88,9 @@ class PayPeriodGUI:
 
         return labels
 
-    def create_service_entries(self, starting_row: int = 1, starting_col: int = 1):
+    def create_service_entries(
+        self, starting_row: int = 1, starting_col: int = 1
+    ) -> list[ServiceEntry]:
         service_entries = []
 
         for i, date in enumerate(self.dates):
@@ -135,9 +139,6 @@ Estimated Payroll for this PayPeriod: \t${self.payperiod.total_pay:.02f}
         return s
 
     def format_total_hours(self):
-        # total_hours = ""
-        # for k, v in self.payperiod.total_hours_by_type_with_overtime():
-        #     total_hours += f"{k:<30}:{v:<20}\n"
 
         total_hours_dict = self.payperiod.total_hours_by_type_with_overtime()
 

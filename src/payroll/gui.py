@@ -1,4 +1,5 @@
 import tkinter as tk
+from pathlib import Path
 
 from .dates import Date
 from .payperiod import PayPeriod
@@ -42,11 +43,14 @@ class EmployeeEntry:
 
 
 class PayPeriodGUI:
-    def __init__(self, dates: list[Date], registry: ServiceTypeRegistry):
+    def __init__(
+        self, dates: list[Date], registry: ServiceTypeRegistry, path_to_records: str
+    ):
         self.dates = dates
         self.registry = registry
         self.root = tk.Tk()
         self.root.title(TITLE)
+        self.path_to_records = Path(path_to_records)
 
     def create_layout(self) -> tk.Tk:
         self.employee_entry = self.create_employee_entry(row=0)
@@ -111,7 +115,9 @@ class PayPeriodGUI:
         button_calculate = tk.Button(
             self.root, text="Calculate Payroll", padx=50, command=self.display_payroll
         )
-        button_save = tk.Button(self.root, text="Record Payroll", padx=50)
+        button_save = tk.Button(
+            self.root, text="Record Payroll", padx=50, command=self.record_payroll
+        )
 
         button_calculate.grid(row=row, column=1)
         button_save.grid(row=row, column=2)
@@ -122,7 +128,8 @@ class PayPeriodGUI:
 
         for entry in self.service_entries:
             service = entry.read()
-            self.payperiod.record_service(service)
+            if service.duration_hrs > 0:
+                self.payperiod.record_service(service)
 
     def display_payroll(self, row: int = 100):
         self.calculate_payroll()
@@ -146,3 +153,7 @@ Estimated Payroll for this PayPeriod: \t${self.payperiod.total_pay:.02f}
             [f"\t{k:<20}:{v:<10}" for k, v in total_hours_dict.items()]
         )
         return total_hours
+
+    def record_payroll(self) -> None:
+        self.calculate_payroll()
+        self.payperiod.record_to(self.path_to_records)

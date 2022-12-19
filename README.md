@@ -37,4 +37,4 @@ Trying to apply in here some of the principles read from Uncle Bob's Clean Code:
 - [x] extract service types into config file
 - [ ] extract overtime threshold into config file
 - [ ] create drop down list instead of free form text entry for provider definition
-- [ ] implement recording functionality to record services provided during a payperiod into a csv file
+- [x] implement recording functionality to record services provided during a payperiod into a csv file

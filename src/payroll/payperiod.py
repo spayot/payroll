@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pathlib import Path
 
 from .services import OVERTIME_SUFFIX, Service, ServiceType, ServiceTypeRegistry
 
@@ -55,6 +56,10 @@ class PayPeriod:
                 for type_name, hours in hours_counts.items()
             ]
         )
+
+    def record_to(self, filepath: Path) -> None:
+        for service in self.services_performed:
+            service.record_to(filepath)
 
     def __repr__(self) -> str:
         repr = """PayPeriod(\n"""

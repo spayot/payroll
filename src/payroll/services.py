@@ -1,5 +1,7 @@
+import json
 from dataclasses import asdict, dataclass
 from datetime import datetime
+from pathlib import Path
 
 import yaml
 
@@ -78,5 +80,16 @@ class Service:
     def base_cost(self) -> float:
         return self.duration_hrs * self.type.hourly_rate
 
-    def record(self, filepath: str) -> None:
-        pass
+    def to_json(self) -> dict:
+        service_dict = {
+            "date": str(self.date),
+            "duration_hrs": self.duration_hrs,
+            "type": self.type.name,
+            "employee": self.type.employee.name,
+            "hourly_rate": self.type.hourly_rate,
+        }
+        return json.dumps(service_dict)
+
+    def record_to(self, filepath: Path) -> None:
+        with filepath.open("a") as fp:
+            fp.write(self.to_json() + "\n")

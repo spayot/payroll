@@ -3,7 +3,7 @@ import argparse
 from src import payroll as pr
 
 DEFAULT_CONFIGPATH = "config/example.yml"
-RECORDS_PATH = "data/service_records.jsonl"
+DEFAULT_PATH_TO_RECORDS = "data/service_records.jsonl"
 
 
 def main(config_path: str, path_to_records: str):
@@ -31,6 +31,14 @@ if __name__ == "__main__":
         type=str,
     )
 
+    parser.add_argument(
+        "-p",
+        "--path_to_records",
+        default=DEFAULT_PATH_TO_RECORDS,
+        help="path to the services config YAML file",
+        type=str,
+    )
+
     args = parser.parse_args()
 
-    main(args.config, RECORDS_PATH)
+    main(args.config, args.path_to_records)
